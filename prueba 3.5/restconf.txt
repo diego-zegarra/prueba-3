@@ -1,0 +1,27 @@
+import json
+import requests
+
+# Desactivar las advertencias de seguridad SSL
+requests.packages.urllib3.disable_warnings()
+
+# URL para obtener el running-config
+api_url = "https://192.168.56.101/restconf/data/Cisco-IOS-XE-native:native"
+
+# Cabeceras para la solicitud
+headers = {
+    "Accept": "application/yang-data+json"
+}
+
+# Autenticación básica
+basicauth = ("cisco", "cisco123!")
+
+# Realizar la solicitud GET
+resp = requests.get(api_url, auth=basicauth, headers=headers, verify=False)
+
+# Verificar si la solicitud fue exitosa
+if resp.status_code == 200:
+    response_json = resp.json()
+    print(json.dumps(response_json, indent=4))
+else:
+    print(f"Error: {resp.status_code} - {resp.reason}")
+    print(resp.text)
